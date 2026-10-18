@@ -122,6 +122,38 @@ textarea{min-height:110px;resize:vertical}
 .sent{font-size:var(--s1);color:var(--ok);font-weight:700}
 @media (max-width:860px){.two{grid-template-columns:1fr}}
 
+/* AI navi */
+.contact-grid{display:grid;grid-template-columns:1.15fr .85fr;gap:32px;align-items:start}
+.contact-grid > *{min-width:0}
+.navi{display:grid;grid-template-rows:auto 1fr auto auto;background:var(--surface);border:1px solid var(--line);border-radius:10px;height:560px;overflow:hidden}
+.navi-head{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:14px 16px;border-bottom:1px solid var(--line)}
+.navi-title{display:flex;align-items:center;gap:10px;font-weight:700}
+.navi-title svg{flex:none}
+.navi-title small{display:block;font-weight:400;font-size:.75rem;color:var(--muted);line-height:1.3}
+.mode{font-family:var(--f-mono);font-size:.68rem;letter-spacing:.06em;border-radius:999px;padding:3px 10px;border:1px solid var(--line);color:var(--muted);white-space:nowrap}
+.mode[data-mode="ai"]{border-color:color-mix(in srgb,var(--ok) 50%,transparent);color:var(--ok)}
+.msgs{overflow-y:auto;padding:16px;display:flex;flex-direction:column;gap:12px;min-height:0}
+.msg{max-width:88%;padding:10px 14px;border-radius:12px;font-size:.92rem;line-height:1.75;white-space:pre-wrap;overflow-wrap:anywhere}
+.msg.ai{background:var(--bg);align-self:flex-start;border-top-left-radius:3px}
+.msg.me{background:var(--accent);color:var(--accent-ink);align-self:flex-end;border-top-right-radius:3px}
+.msg.pending{color:var(--muted)}
+@media (prefers-reduced-motion:no-preference){.msg.pending{animation:blink 1.2s ease-in-out infinite}}
+@keyframes blink{50%{opacity:.45}}
+.suggest{align-self:stretch;border:1px dashed var(--accent);border-radius:10px;padding:14px;display:grid;gap:8px;font-size:.88rem}
+.suggest b{color:var(--accent)}
+.suggest pre{margin:0;font:inherit;white-space:pre-wrap;color:var(--muted);max-height:7.5em;overflow:auto}
+.suggest .btn{justify-self:start}
+.chips{display:flex;flex-wrap:wrap;gap:8px;padding:0 16px 12px}
+.chip{font:inherit;font-size:.8rem;color:var(--ink);background:transparent;border:1px solid var(--line);border-radius:999px;padding:5px 12px;cursor:pointer}
+.chip:hover{border-color:var(--accent);color:var(--accent)}
+.composer{display:flex;gap:8px;padding:12px;border-top:1px solid var(--line);align-items:flex-end}
+.composer textarea{min-height:44px;max-height:120px;resize:none;flex:1}
+.composer .btn{flex:none;height:44px}
+.btn[hidden]{display:none!important}
+.btn:disabled{opacity:.5;cursor:not-allowed}
+.form-note{font-size:.8rem;color:var(--muted)}
+@media (max-width:860px){.contact-grid{grid-template-columns:1fr}.navi{height:500px}}
+
 footer{border-top:1px solid var(--line);color:var(--muted);font-size:.8rem}
 footer .wrap{display:flex;flex-wrap:wrap;justify-content:space-between;gap:12px;padding-block:28px}
 @media (prefers-reduced-motion:no-preference){html{scroll-behavior:smooth}}
@@ -264,9 +296,12 @@ footer .wrap{display:flex;flex-wrap:wrap;justify-content:space-between;gap:12px;
   </section>
 
   <section class="band" id="company">
-    <div class="wrap two">
-      <div>
-        <div class="sec-head" style="grid-template-columns:1fr;margin-bottom:24px"><h2>会社概要</h2></div>
+    <div class="wrap">
+      <div class="sec-head">
+        <h2>会社概要</h2>
+        <p>福岡・天神のオフィスで、全員が同じフロアで開発しています。</p>
+      </div>
+      <div style="max-width:760px">
         <dl class="info">
           <dt>会社名</dt><dd>株式会社ナギサ・ソフトウェア</dd>
           <dt>設立</dt><dd>2014年4月</dd>
@@ -277,8 +312,42 @@ footer .wrap{display:flex;flex-wrap:wrap;justify-content:space-between;gap:12px;
           <dt>事業内容</dt><dd>業務システムの受託開発・保守運用、自社サービスの開発・提供</dd>
         </dl>
       </div>
-      <div id="contact">
-        <div class="sec-head" style="grid-template-columns:1fr;margin-bottom:24px"><h2>お問い合わせ</h2><p>2営業日以内に担当者からご連絡します。</p></div>
+    </div>
+  </section>
+
+  <section class="band" id="contact">
+    <div class="wrap">
+      <div class="sec-head">
+        <h2>お問い合わせ</h2>
+        <p>何を相談すればいいか決まっていなくても大丈夫です。AIナビに今の困りごとを書くと、合った相談窓口を案内し、フォームの下書きを作ります。送信後は2営業日以内に担当者からご連絡します。</p>
+      </div>
+      <div class="contact-grid">
+        <div class="navi" aria-label="AIナビ">
+          <div class="navi-head">
+            <div class="navi-title">
+              <svg width="30" height="30" viewBox="0 0 30 30" aria-hidden="true"><circle cx="15" cy="15" r="15" fill="var(--accent)"/><path d="M7 17c2.7-3.4 5.3-3.4 8 0s5.3 3.4 8 0" stroke="var(--signal)" stroke-width="2.2" fill="none" stroke-linecap="round"/><circle cx="11" cy="11.5" r="1.6" fill="var(--accent-ink)"/><circle cx="19" cy="11.5" r="1.6" fill="var(--accent-ink)"/></svg>
+              <span>AIナビ<small>ご相談内容の整理をお手伝いします</small></span>
+            </div>
+            <span class="mode" id="navi-mode" data-mode="loading">接続中…</span>
+          </div>
+          <div class="msgs" id="navi-msgs" aria-live="polite">
+            <div class="msg ai">こんにちは。ナギサ・ソフトウェアのAIナビです。
+どんなことでお困りですか？「紙の予約台帳をやめたい」「古い社内システムが限界」など、思いつくままに書いてください。</div>
+          </div>
+          <div class="chips" id="navi-chips">
+            <button class="chip" type="button">予約管理のシステムを作りたい</button>
+            <button class="chip" type="button">古い社内システムを新しくしたい</button>
+            <button class="chip" type="button">今のシステムの保守を任せたい</button>
+            <button class="chip" type="button">Shioriの導入を検討している</button>
+          </div>
+          <div class="composer">
+            <label for="navi-input" class="sr" style="position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)">AIナビへのメッセージ</label>
+            <textarea id="navi-input" rows="1" placeholder="ご相談内容を入力（Enterで送信）"></textarea>
+            <button class="btn ghost" id="navi-stop" type="button" hidden>停止</button>
+            <button class="btn" id="navi-send" type="button">送信</button>
+          </div>
+        </div>
+
         <form id="contact-form" novalidate>
           <label for="f-name">お名前<input id="f-name" name="name" required placeholder="山田 花子"></label>
           <label for="f-mail">メールアドレス<input id="f-mail" name="email" type="email" required placeholder="hanako@example.jp"></label>
@@ -292,6 +361,7 @@ footer .wrap{display:flex;flex-wrap:wrap;justify-content:space-between;gap:12px;
             <button class="btn" type="submit">送信内容を確認する</button>
             <span class="sent" id="f-status" role="status"></span>
           </div>
+          <p class="form-note">AIナビの下書きは自由に書き換えられます。AIとの会話内容は当社には送られません。</p>
         </form>
       </div>
     </div>
@@ -319,6 +389,220 @@ document.getElementById('contact-form').addEventListener('submit', function (e) 
   status.style.color = '';
   status.textContent = name + ' 様、入力ありがとうございます（サンプルのため送信はされません）。';
 });
+
+/* ---- AIナビ ---- */
+(function () {
+  var TOPICS = ['受託開発', '既存システムの刷新', '保守・運用', 'Shioriについて', 'その他'];
+  var RULES = [
+    'あなたは「株式会社ナギサ・ソフトウェア」のWebサイトにある問い合わせ案内係「AIナビ」です。',
+    '来訪者の困りごとを聞き取り、合った相談窓口を案内し、問い合わせフォームの「詳細」欄の下書きを作ります。',
+    '',
+    '# 会社情報（これ以外の事実は作らないこと）',
+    '- 福岡市中央区天神の業務システム開発会社。2014年設立、社員42名（エンジニア31名）。医療・物流・自治体向けが中心。',
+    '- 相談窓口は次の5つ: 受託開発 / 既存システムの刷新 / 保守・運用 / Shioriについて / その他',
+    '- 受託開発: 予約管理、在庫・配送管理、申請ワークフローなどのWebシステム。要件が固まる前から相談可。TypeScript, Go, PostgreSQL。',
+    '- 既存システムの刷新: 長年使っている社内システムを業務を止めずに段階的に置き換える。データ移行・並行稼働の計画も担当。AWS。',
+    '- 保守・運用: 監視、障害対応、小さな改修を月額で。平日9-18時は30分以内に一次回答。稼働率99.95%（2025年度）。',
+    '- Shiori: クリニック向けの予約・順番待ちシステム。Web/LINE予約、待ち人数表示、電子カルテとCSV/API連携。約320施設で利用。',
+    '- 進め方: ヒアリング約2週間 → 試作約3週間 → 開発3〜6か月（2週間ごとにレビュー） → 本番稼働・運用。',
+    '- 具体的な金額・納期・空き状況は答えず、担当者がヒアリング後にお伝えすると案内する。',
+    '',
+    '# 話し方',
+    '- 日本語の丁寧語で、1回の返答は2〜4文。箇条書きやMarkdown記号は使わない。',
+    '- 足りない情報は1回に1つだけ質問する（業種・対象業務・今の困りごと・希望時期・利用人数など）。',
+    '- 2〜3往復で相談の要点がつかめたら、下書きができたので右のフォームに反映できると伝える。',
+    '- 会社と関係のない依頼には、問い合わせの案内役であることを伝えて相談の話に戻す。',
+    '',
+    '# 出力形式（必ず守る）',
+    '返答文のあとに改行し、最後の1行に次の形式を必ず付ける。この行は来訪者には表示されない。',
+    '@@FORM {"topic": "5つの相談窓口のどれか、まだ判断できなければ null", "summary": "詳細欄の下書き。【ご相談の概要】【現状】【ご希望の時期】などの見出しを付け、分かっている事実だけを書く。まだ情報が少なければ空文字"}'
+  ].join('\n');
+
+  var $ = function (id) { return document.getElementById(id); };
+  var msgs = $('navi-msgs'), input = $('navi-input'), sendBtn = $('navi-send'),
+      stopBtn = $('navi-stop'), modeEl = $('navi-mode'), chips = $('navi-chips');
+  var turns = [], busy = false, ctl = null, sample = null, ready = false;
+  var reduceMotion = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  var samplePromise = (window.claude && typeof window.claude.use === 'function')
+    ? Promise.resolve(window.claude.use('sample')).catch(function () { return null; })
+    : Promise.resolve(null);
+  samplePromise.then(function (s) { sample = s; ready = true; setMode(s ? 'ai' : 'offline'); });
+
+  function setMode(m) {
+    modeEl.dataset.mode = m;
+    modeEl.textContent = m === 'ai' ? 'AI応答' : 'かんたんナビ';
+    modeEl.title = m === 'ai' ? 'AIがお答えします' : 'この画面ではAIが使えないため、キーワードでご案内します';
+  }
+  function scroll() { msgs.scrollTop = msgs.scrollHeight; }
+  function addMsg(role, text) {
+    var d = document.createElement('div');
+    d.className = 'msg ' + role;
+    d.textContent = text;
+    msgs.appendChild(d);
+    scroll();
+    return d;
+  }
+  function visible(t) {
+    return String(t || '').split('@@FORM')[0].replace(/@{1,2}F?O?R?M?\s*$/, '').trim();
+  }
+  function parseForm(t) {
+    var i = t.indexOf('@@FORM');
+    if (i < 0) return null;
+    var raw = t.slice(i + 6), a = raw.indexOf('{'), b = raw.lastIndexOf('}');
+    if (a < 0 || b < a) return null;
+    try { return JSON.parse(raw.slice(a, b + 1)); } catch (e) { return null; }
+  }
+  function setBusy(b) {
+    busy = b;
+    sendBtn.disabled = b;
+    stopBtn.hidden = !b;
+  }
+
+  function addSuggest(topic, summary) {
+    if (TOPICS.indexOf(topic) < 0) topic = null;
+    summary = typeof summary === 'string' ? summary.trim() : '';
+    if (!topic && !summary) return;
+    Array.prototype.forEach.call(msgs.querySelectorAll('.suggest'), function (n) { n.remove(); });
+    var card = document.createElement('div');
+    card.className = 'suggest';
+    var head = document.createElement('div');
+    head.append('おすすめの相談窓口：');
+    var b = document.createElement('b');
+    b.textContent = topic || '（もう少し伺ってからご案内します）';
+    head.appendChild(b);
+    card.appendChild(head);
+    if (summary) {
+      var pre = document.createElement('pre');
+      pre.textContent = summary;
+      card.appendChild(pre);
+    }
+    var btn = document.createElement('button');
+    btn.type = 'button';
+    btn.className = 'btn';
+    btn.textContent = 'フォームに反映する';
+    btn.addEventListener('click', function () {
+      if (topic) $('f-topic').value = topic;
+      if (summary) $('f-msg').value = summary;
+      btn.textContent = '反映しました';
+      btn.disabled = true;
+      $('contact-form').scrollIntoView({ behavior: reduceMotion ? 'auto' : 'smooth', block: 'nearest' });
+      $('f-name').focus({ preventScroll: true });
+    });
+    card.appendChild(btn);
+    msgs.appendChild(card);
+    scroll();
+  }
+
+  /* AIが使えない画面用：キーワードで案内する */
+  function offline(text) {
+    var t = text;
+    var pick = function (re) { return re.test(t); };
+    var topic, reply, fields;
+    if (pick(/Shiori|しおり|クリニック|医院|病院|診療|歯科|順番待ち/)) {
+      topic = 'Shioriについて';
+      reply = 'Shioriのご相談ですね。診療科や1日の来院数、今の予約方法を詳細欄に書いていただくと、担当者がスムーズにご案内できます。下の下書きをフォームに反映できます。';
+      fields = ['【診療科・施設の種類】', '【1日の来院数の目安】', '【現在の予約方法】'];
+    } else if (pick(/古い|刷新|移行|リプレイス|入れ替え|老朽|限界|サポート終了|作り直/)) {
+      topic = '既存システムの刷新';
+      reply = '既存システムの刷新のご相談ですね。業務を止めずに段階的に置き換える進め方をご提案しています。今のシステムの使用年数や利用人数がわかると話が早く進みます。';
+      fields = ['【今のシステムの概要・使用年数】', '【利用人数】', '【ご希望の時期】'];
+    } else if (pick(/保守|運用|障害|監視|メンテ|改修|止まる|落ちる/)) {
+      topic = '保守・運用';
+      reply = '保守・運用のご相談ですね。月額で監視・障害対応・小さな改修をお引き受けしています。対象のシステムと、今困っていることを教えてください。';
+      fields = ['【対象のシステム】', '【今お困りのこと】', '【現在の保守体制】'];
+    } else if (pick(/作りたい|開発|システム|アプリ|ツール|予約|在庫|配送|申請|Excel|エクセル|紙/)) {
+      topic = '受託開発';
+      reply = '新しいシステムの開発のご相談ですね。要件が固まっていない段階からご相談いただけます。対象の業務と、今どんな方法で管理しているかを書いていただけると助かります。';
+      fields = ['【対象の業務】', '【現在の管理方法】', '【ご希望の時期】'];
+    } else {
+      topic = 'その他';
+      reply = 'ありがとうございます。担当者が内容を確認してご連絡します。業種や対象の業務がわかると、より適切な担当者におつなぎできます。';
+      fields = ['【業種】', '【ご相談の内容】'];
+    }
+    return { reply: reply, topic: topic, summary: ['【ご相談の概要】', text].concat(fields).join('\n') };
+  }
+
+  function errCopy(code) {
+    switch (code) {
+      case 'rate_limited': return '混み合っています。少し時間をおいてから、もう一度送ってください。';
+      case 'session_expired': return 'ログインの有効期限が切れました。ログインし直してから送ってください。';
+      case 'refused': return 'この内容にはお答えできません。言い方を変えて送ってください。';
+      case 'prompt_too_large': return '会話が長くなりました。ページを再読み込みして、はじめからご相談ください。';
+      default: return '返答を受け取れませんでした。もう一度送ってください。';
+    }
+  }
+  var HIDE_CODES = ['not_granted', 'sampling_disabled', 'not_declared', 'capability_disabled', 'capability_removed'];
+
+  function answerOffline(text, bubble) {
+    var r = offline(text);
+    bubble.classList.remove('pending');
+    bubble.textContent = r.reply;
+    turns.push({ role: 'assistant', content: r.reply });
+    addSuggest(r.topic, r.summary);
+  }
+
+  async function send(text) {
+    text = String(text || '').trim();
+    if (!text || busy) return;
+    input.value = '';
+    chips.hidden = true;
+    addMsg('me', text);
+    turns.push({ role: 'user', content: text });
+    setBusy(true);
+    var bubble = addMsg('ai', '考え中…');
+    bubble.classList.add('pending');
+    if (!ready) await samplePromise;
+    if (!sample) { answerOffline(text, bubble); setBusy(false); return; }
+
+    ctl = new AbortController();
+    try {
+      var res = await sample([{ role: 'user', content: RULES }].concat(turns.slice(-12)), {
+        cache: false,
+        modelTier: 'quick',
+        signal: ctl.signal,
+        onText: function (u) {
+          var v = visible(u.text);
+          if (v) { bubble.classList.remove('pending'); bubble.textContent = v; scroll(); }
+        }
+      });
+      bubble.classList.remove('pending');
+      bubble.textContent = visible(res.text) || '…';
+      turns.push({ role: 'assistant', content: res.text });
+      var f = parseForm(res.text);
+      if (f) addSuggest(f.topic, f.summary);
+    } catch (e) {
+      var code = e && e.code;
+      var kept = e && e.text ? visible(e.text) : '';
+      bubble.classList.remove('pending');
+      if (code === 'cancelled') {
+        bubble.textContent = kept || '（停止しました）';
+        if (kept) turns.push({ role: 'assistant', content: kept });
+      } else if (HIDE_CODES.indexOf(code) >= 0) {
+        sample = null;
+        setMode('offline');
+        answerOffline(text, bubble);
+      } else {
+        bubble.textContent = (kept ? kept + '\n\n' : '') + errCopy(code);
+      }
+    } finally {
+      ctl = null;
+      setBusy(false);
+    }
+  }
+
+  sendBtn.addEventListener('click', function () { send(input.value); });
+  stopBtn.addEventListener('click', function () { if (ctl) ctl.abort(); });
+  input.addEventListener('keydown', function (e) {
+    if (e.key === 'Enter' && !e.shiftKey && !e.isComposing && e.keyCode !== 229) {
+      e.preventDefault();
+      send(input.value);
+    }
+  });
+  Array.prototype.forEach.call(chips.querySelectorAll('.chip'), function (c) {
+    c.addEventListener('click', function () { send(c.textContent); });
+  });
+})();
 </script>
 </body>
 </html>
