@@ -1,0 +1,324 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>ナギサ・ソフトウェア</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Zen+Kaku+Gothic+New:wght@400;500;700;900&family=JetBrains+Mono:wght@400;600&display=swap">
+<style>
+/* Layout: 左寄せの非対称グリッド。ヒーローは見出し＋実際のリリースログ。セクションは細い罫線で区切る */
+:root{
+  --bg:#f4f6f8; --surface:#ffffff; --ink:#14202e; --muted:#5a6877; --line:#d8dee5;
+  --accent:#1f5fbf; --accent-ink:#ffffff; --signal:#f2c230; --code-bg:#14202e; --code-fg:#d6e2ef; --ok:#2e9e6a;
+  --f-display:"Zen Kaku Gothic New","Hiragino Kaku Gothic ProN","Yu Gothic",sans-serif;
+  --f-body:"Zen Kaku Gothic New","Hiragino Sans","Yu Gothic",Meiryo,sans-serif;
+  --f-mono:"JetBrains Mono",ui-monospace,Consolas,monospace;
+  --s1:.875rem; --s2:1rem; --s3:1.25rem; --s4:1.75rem; --s5:clamp(2rem,5.5vw,3.6rem);
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --bg:#0f1720; --surface:#16212d; --ink:#e6edf4; --muted:#9aa9b8; --line:#2a3846;
+  --accent:#6fa3f0; --accent-ink:#0f1720; --signal:#f2c230; --code-bg:#0a1118; --code-fg:#cfdcea; --ok:#5cc79a; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#0f1720; --surface:#16212d; --ink:#e6edf4; --muted:#9aa9b8; --line:#2a3846;
+  --accent:#6fa3f0; --accent-ink:#0f1720; --signal:#f2c230; --code-bg:#0a1118; --code-fg:#cfdcea; --ok:#5cc79a; color-scheme:dark}
+
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--ink);font-family:var(--f-body);font-size:var(--s2);line-height:1.8;margin:0}
+.wrap{max-width:1120px;margin:0 auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+h1,h2,h3{font-family:var(--f-display);text-wrap:balance;line-height:1.3;margin:0}
+p{margin:0}
+a{color:var(--accent)}
+:focus-visible{outline:3px solid var(--signal);outline-offset:2px}
+.eyebrow{font-family:var(--f-mono);font-size:.75rem;letter-spacing:.12em;text-transform:uppercase;color:var(--muted)}
+
+/* header */
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:10;background:var(--bg)}
+header{position:sticky;top:env(safe-area-inset-top,0px);z-index:5;background:color-mix(in srgb,var(--bg) 88%,transparent);backdrop-filter:blur(8px);border-bottom:1px solid var(--line)}
+header .wrap{display:flex;align-items:center;justify-content:space-between;gap:16px;padding-block:14px}
+.logo{display:flex;align-items:center;gap:10px;font-family:var(--f-display);font-weight:900;font-size:1.1rem;color:var(--ink);text-decoration:none}
+.logo svg{flex:none}
+nav ul{display:flex;gap:24px;list-style:none;margin:0;padding:0;font-size:var(--s1)}
+nav a{color:var(--ink);text-decoration:none}
+nav a:hover{color:var(--accent)}
+.btn{display:inline-flex;align-items:center;gap:8px;background:var(--accent);color:var(--accent-ink);border:0;border-radius:6px;padding:10px 18px;font:700 var(--s1)/1 var(--f-body);text-decoration:none;cursor:pointer}
+.btn:hover{filter:brightness(1.08)}
+.btn.ghost{background:transparent;color:var(--ink);border:1px solid var(--line)}
+@media (max-width:760px){nav ul{display:none}}
+
+/* hero */
+.hero .wrap{display:grid;grid-template-columns:1.1fr .9fr;gap:48px;align-items:center;padding-block:72px 64px}
+.hero h1{font-size:var(--s5);font-weight:900;letter-spacing:-.01em;margin-top:14px}
+.hero h1 mark{background:linear-gradient(transparent 62%,var(--signal) 62%);color:inherit;padding:0 .05em}
+.hero .lead{color:var(--muted);font-size:1.075rem;max-width:34em;margin-top:22px}
+.hero .ctas{display:flex;flex-wrap:wrap;gap:12px;margin-top:30px}
+.log{background:var(--code-bg);color:var(--code-fg);border-radius:10px;font-family:var(--f-mono);font-size:.8rem;line-height:1.75;min-width:0;overflow:hidden}
+.log-head{display:flex;justify-content:space-between;padding:10px 16px;border-bottom:1px solid #ffffff1a;color:#8ea2b6;font-size:.72rem}
+.log pre{margin:0;padding:16px;overflow-x:auto;white-space:pre}
+.log .v{color:var(--signal)} .log .ok{color:#5cc79a} .log .dim{color:#6f8399}
+@media (max-width:860px){.hero .wrap{grid-template-columns:1fr;padding-block:48px}}
+
+/* sections */
+section.band{border-top:1px solid var(--line)}
+section.band > .wrap{padding-block:72px}
+.sec-head{display:grid;grid-template-columns:240px 1fr;gap:32px;margin-bottom:40px}
+.sec-head h2{font-size:var(--s4);font-weight:900}
+.sec-head p{color:var(--muted);max-width:40em}
+@media (max-width:760px){.sec-head{grid-template-columns:1fr;gap:10px}}
+
+.services{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:var(--line);border:1px solid var(--line);border-radius:10px;overflow:hidden}
+.service{background:var(--surface);padding:28px;display:flex;flex-direction:column;gap:12px;min-width:0}
+.service h3{font-size:var(--s3);font-weight:700}
+.service p{color:var(--muted);font-size:.95rem}
+.service .tags{display:flex;flex-wrap:wrap;gap:6px;margin-top:auto;padding-top:8px}
+.tag{font-family:var(--f-mono);font-size:.7rem;border:1px solid var(--line);border-radius:4px;padding:2px 8px;color:var(--muted)}
+@media (max-width:860px){.services{grid-template-columns:1fr}}
+
+/* product */
+.product{display:grid;grid-template-columns:1fr 1fr;gap:40px;align-items:start}
+.product h3{font-size:var(--s4);font-weight:900}
+.product h3 small{display:block;font-size:var(--s1);font-weight:500;color:var(--muted);margin-top:6px}
+.product ul{margin:20px 0 0;padding:0;list-style:none;display:grid;gap:12px}
+.product li{display:grid;grid-template-columns:20px 1fr;gap:10px}
+.product li::before{content:"";width:8px;height:8px;margin-top:.7em;background:var(--accent);border-radius:2px}
+.sched{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:20px;min-width:0;overflow-x:auto}
+.sched table{width:100%;border-collapse:collapse;font-size:.82rem;min-width:420px}
+.sched th,.sched td{border-bottom:1px solid var(--line);padding:8px 6px;text-align:left}
+.sched th{font-family:var(--f-mono);font-weight:600;font-size:.7rem;color:var(--muted);letter-spacing:.06em}
+.slot{display:inline-block;border-radius:4px;padding:2px 8px;font-size:.75rem;font-weight:700}
+.slot.busy{background:color-mix(in srgb,var(--accent) 18%,transparent);color:var(--accent)}
+.slot.free{background:color-mix(in srgb,var(--ok) 16%,transparent);color:var(--ok)}
+.slot.wait{background:color-mix(in srgb,var(--signal) 28%,transparent);color:var(--ink)}
+@media (max-width:860px){.product{grid-template-columns:1fr}}
+
+/* numbers */
+.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:24px}
+.stat{border-top:2px solid var(--ink);padding-top:14px}
+.stat b{display:block;font-family:var(--f-mono);font-size:clamp(1.6rem,3.5vw,2.3rem);font-weight:600;font-variant-numeric:tabular-nums;line-height:1.2}
+.stat span{color:var(--muted);font-size:var(--s1)}
+@media (max-width:760px){.stats{grid-template-columns:repeat(2,1fr)}}
+
+/* process */
+.steps{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(4,1fr);gap:24px;counter-reset:step}
+.steps li{counter-increment:step;display:flex;flex-direction:column;gap:8px}
+.steps li::before{content:"STEP " counter(step);font-family:var(--f-mono);font-size:.72rem;color:var(--accent);letter-spacing:.1em}
+.steps h3{font-size:1.1rem;font-weight:700}
+.steps p{color:var(--muted);font-size:.92rem}
+.steps .dur{font-family:var(--f-mono);font-size:.75rem;color:var(--ink)}
+@media (max-width:860px){.steps{grid-template-columns:repeat(2,1fr)}}
+@media (max-width:480px){.steps{grid-template-columns:1fr}}
+
+/* company + contact */
+.two{display:grid;grid-template-columns:1fr 1fr;gap:48px}
+dl.info{display:grid;grid-template-columns:7em 1fr;margin:0;font-size:.95rem}
+dl.info dt,dl.info dd{border-bottom:1px solid var(--line);padding:12px 0;margin:0}
+dl.info dt{color:var(--muted)}
+form{display:grid;gap:16px;background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:24px}
+label{display:grid;gap:6px;font-size:var(--s1);font-weight:500}
+input,select,textarea{font:inherit;font-size:.95rem;color:var(--ink);background:var(--bg);border:1px solid var(--line);border-radius:6px;padding:10px 12px;width:100%}
+textarea{min-height:110px;resize:vertical}
+.sent{font-size:var(--s1);color:var(--ok);font-weight:700}
+@media (max-width:860px){.two{grid-template-columns:1fr}}
+
+footer{border-top:1px solid var(--line);color:var(--muted);font-size:.8rem}
+footer .wrap{display:flex;flex-wrap:wrap;justify-content:space-between;gap:12px;padding-block:28px}
+@media (prefers-reduced-motion:no-preference){html{scroll-behavior:smooth}}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="wrap">
+    <a class="logo" href="#top" aria-label="ナギサ・ソフトウェア トップへ">
+      <svg width="28" height="28" viewBox="0 0 28 28" aria-hidden="true"><rect width="28" height="28" rx="6" fill="var(--accent)"/><path d="M5 17c3-4 6-4 9 0s6 4 9 0" stroke="var(--accent-ink)" stroke-width="2.4" fill="none" stroke-linecap="round"/><path d="M5 11c3-4 6-4 9 0s6 4 9 0" stroke="var(--signal)" stroke-width="2.4" fill="none" stroke-linecap="round"/></svg>
+      ナギサ・ソフトウェア
+    </a>
+    <nav aria-label="メイン">
+      <ul>
+        <li><a href="#services">事業内容</a></li>
+        <li><a href="#product">プロダクト</a></li>
+        <li><a href="#process">進め方</a></li>
+        <li><a href="#company">会社概要</a></li>
+      </ul>
+    </nav>
+    <a class="btn" href="#contact">相談する</a>
+  </div>
+</header>
+
+<main id="top">
+  <section class="hero">
+    <div class="wrap">
+      <div>
+        <p class="eyebrow">Fukuoka · Since 2014</p>
+        <h1>毎週ちゃんと届く。<br><mark>止まらない</mark>業務システムを。</h1>
+        <p class="lead">ナギサ・ソフトウェアは、福岡を拠点に医療・物流・自治体向けの業務システムをつくる開発会社です。設計から運用まで同じチームが担当し、2週間ごとに動くものをお見せします。</p>
+        <div class="ctas">
+          <a class="btn" href="#contact">無料で相談する</a>
+          <a class="btn ghost" href="#services">事業内容を見る</a>
+        </div>
+      </div>
+      <div class="log" role="img" aria-label="自社プロダクトShioriの直近のリリース履歴">
+        <div class="log-head"><span>shiori / releases</span><span>main</span></div>
+<pre><span class="dim">$ git log --oneline --tags -5</span>
+<span class="v">v4.12.0</span>  予約枠の一括コピーに対応
+<span class="v">v4.11.3</span>  休診日の祝日判定を修正
+<span class="v">v4.11.2</span>  LINE通知の再送間隔を調整
+<span class="v">v4.11.0</span>  待ち人数のリアルタイム表示
+<span class="v">v4.10.4</span>  CSV出力の文字コード選択
+
+<span class="dim">$ ./deploy --env production</span>
+<span class="ok">✓</span> migrations   12 applied
+<span class="ok">✓</span> health check  200 OK (38ms)
+<span class="ok">✓</span> released     2026-10-14 10:02 JST</pre>
+      </div>
+    </div>
+  </section>
+
+  <section class="band" id="services">
+    <div class="wrap">
+      <div class="sec-head">
+        <h2>事業内容</h2>
+        <p>受託開発と自社プロダクトの両方を手がけています。自社で運用を続けてきた経験を、お客様のシステムづくりにも活かしています。</p>
+      </div>
+      <div class="services">
+        <article class="service">
+          <p class="eyebrow">Contract Development</p>
+          <h3>受託開発</h3>
+          <p>予約管理、在庫・配送管理、申請ワークフローなど、現場の紙とExcelを置き換えるWebシステムを開発します。要件が固まっていない段階からご相談いただけます。</p>
+          <div class="tags"><span class="tag">TypeScript</span><span class="tag">Go</span><span class="tag">PostgreSQL</span></div>
+        </article>
+        <article class="service">
+          <p class="eyebrow">Modernization</p>
+          <h3>既存システムの刷新</h3>
+          <p>10年以上動いている社内システムを、業務を止めずに段階的に置き換えます。データ移行と並行稼働の計画まで含めてお引き受けします。</p>
+          <div class="tags"><span class="tag">移行計画</span><span class="tag">並行稼働</span><span class="tag">AWS</span></div>
+        </article>
+        <article class="service">
+          <p class="eyebrow">Operation</p>
+          <h3>保守・運用</h3>
+          <p>リリース後の監視、障害対応、小さな改修を月額で担当します。平日9時〜18時は30分以内に一次回答します。</p>
+          <div class="tags"><span class="tag">SLA 99.95%</span><span class="tag">監視</span><span class="tag">月次レポート</span></div>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <section class="band" id="product">
+    <div class="wrap">
+      <div class="sec-head">
+        <h2>プロダクト</h2>
+        <p>自社で開発・運用しているクリニック向け予約サービスです。</p>
+      </div>
+      <div class="product">
+        <div>
+          <h3>Shiori（しおり）<small>クリニック向け 予約・順番待ちシステム</small></h3>
+          <ul>
+            <li><span>Web・LINEから24時間予約。電話対応の時間を平均で4割減らしました。</span></li>
+            <li><span>待ち人数をスマートフォンに表示し、院内の混雑を抑えます。</span></li>
+            <li><span>電子カルテとの連携はCSVとAPIの両方に対応しています。</span></li>
+            <li><span>九州・中国地方の約320施設で利用されています。</span></li>
+          </ul>
+        </div>
+        <div class="sched" aria-label="Shioriの予約画面の例">
+          <p class="eyebrow" style="margin-bottom:10px">画面例 · 10月20日（火）午前</p>
+          <table>
+            <thead><tr><th>TIME</th><th>診察室1</th><th>診察室2</th><th>処置室</th></tr></thead>
+            <tbody>
+              <tr><td>09:00</td><td><span class="slot busy">予約済</span></td><td><span class="slot busy">予約済</span></td><td><span class="slot free">空き</span></td></tr>
+              <tr><td>09:15</td><td><span class="slot busy">予約済</span></td><td><span class="slot free">空き</span></td><td><span class="slot busy">予約済</span></td></tr>
+              <tr><td>09:30</td><td><span class="slot wait">順番待ち 3</span></td><td><span class="slot busy">予約済</span></td><td><span class="slot free">空き</span></td></tr>
+              <tr><td>09:45</td><td><span class="slot free">空き</span></td><td><span class="slot wait">順番待ち 1</span></td><td><span class="slot free">空き</span></td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="band">
+    <div class="wrap">
+      <div class="stats">
+        <div class="stat"><b>186</b><span>開発・運用したシステム</span></div>
+        <div class="stat"><b>99.95%</b><span>保守契約の稼働率（2025年度）</span></div>
+        <div class="stat"><b>2週間</b><span>動くものをお見せする間隔</span></div>
+        <div class="stat"><b>42名</b><span>社員数（うちエンジニア31名）</span></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="band" id="process">
+    <div class="wrap">
+      <div class="sec-head">
+        <h2>開発の進め方</h2>
+        <p>一般的な中規模案件（画面数30前後）の流れです。期間は内容によって変わります。</p>
+      </div>
+      <ol class="steps">
+        <li><h3>ヒアリング</h3><p>現場に伺い、今の業務の流れと困りごとを一緒に整理します。</p><span class="dur">約2週間</span></li>
+        <li><h3>試作</h3><p>主要な画面を実際に触れる形で作り、使い勝手を確かめます。</p><span class="dur">約3週間</span></li>
+        <li><h3>開発</h3><p>2週間ごとに機能を追加し、その都度レビューしていただきます。</p><span class="dur">3〜6か月</span></li>
+        <li><h3>本番稼働・運用</h3><p>旧システムからデータを移し、稼働後も同じチームが保守します。</p><span class="dur">継続</span></li>
+      </ol>
+    </div>
+  </section>
+
+  <section class="band" id="company">
+    <div class="wrap two">
+      <div>
+        <div class="sec-head" style="grid-template-columns:1fr;margin-bottom:24px"><h2>会社概要</h2></div>
+        <dl class="info">
+          <dt>会社名</dt><dd>株式会社ナギサ・ソフトウェア</dd>
+          <dt>設立</dt><dd>2014年4月</dd>
+          <dt>代表者</dt><dd>代表取締役 波多野 海斗</dd>
+          <dt>所在地</dt><dd>福岡県福岡市中央区天神2-8-41 渚ビル5F</dd>
+          <dt>資本金</dt><dd>3,000万円</dd>
+          <dt>従業員数</dt><dd>42名（2026年10月時点）</dd>
+          <dt>事業内容</dt><dd>業務システムの受託開発・保守運用、自社サービスの開発・提供</dd>
+        </dl>
+      </div>
+      <div id="contact">
+        <div class="sec-head" style="grid-template-columns:1fr;margin-bottom:24px"><h2>お問い合わせ</h2><p>2営業日以内に担当者からご連絡します。</p></div>
+        <form id="contact-form" novalidate>
+          <label for="f-name">お名前<input id="f-name" name="name" required placeholder="山田 花子"></label>
+          <label for="f-mail">メールアドレス<input id="f-mail" name="email" type="email" required placeholder="hanako@example.jp"></label>
+          <label for="f-topic">ご相談内容
+            <select id="f-topic" name="topic">
+              <option>受託開発</option><option>既存システムの刷新</option><option>保守・運用</option><option>Shioriについて</option><option>その他</option>
+            </select>
+          </label>
+          <label for="f-msg">詳細<textarea id="f-msg" name="message" placeholder="現在の課題やご予算、時期など"></textarea></label>
+          <div style="display:flex;flex-wrap:wrap;align-items:center;gap:14px">
+            <button class="btn" type="submit">送信内容を確認する</button>
+            <span class="sent" id="f-status" role="status"></span>
+          </div>
+        </form>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <div class="wrap">
+    <span>© 2026 Nagisa Software Inc.</span>
+    <span>このページは架空の会社のサンプルです。</span>
+  </div>
+</footer>
+
+<script>
+document.getElementById('contact-form').addEventListener('submit', function (e) {
+  e.preventDefault();
+  var name = document.getElementById('f-name').value.trim();
+  var mail = document.getElementById('f-mail');
+  var status = document.getElementById('f-status');
+  if (!name || !mail.value || !mail.checkValidity()) {
+    status.style.color = 'var(--muted)';
+    status.textContent = 'お名前と正しいメールアドレスを入力してください。';
+    return;
+  }
+  status.style.color = '';
+  status.textContent = name + ' 様、入力ありがとうございます（サンプルのため送信はされません）。';
+});
+</script>
+</body>
+</html>
